@@ -8,7 +8,6 @@ class Servicios extends Model< IServicios > implements IServicios {
     public fechaInicio!: Date;
     public ultimaFacturacion!: Date;
     public ultimoPago!: number;
-    public clienteIdentificacion!: string;
 }
 
 Servicios.init({
@@ -19,6 +18,7 @@ Servicios.init({
     servicio: {
         type: DataTypes.STRING(80),
         allowNull: false,
+        primaryKey: true
     },
     fechaInicio: {
         type: DataTypes.DATE,
@@ -30,11 +30,6 @@ Servicios.init({
     },
     ultimoPago: {
         type: DataTypes.INTEGER,
-    },
-    clienteIdentificacion: {
-        field: 'cliente_identificacion',
-        allowNull: false,
-        type: DataTypes.STRING
     }
 },
 {

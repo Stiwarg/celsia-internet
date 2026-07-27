@@ -1,4 +1,5 @@
 import { ENUM, type Optional } from "sequelize";
+import { optional } from "zod";
 
 /*CREATE TABLE clientes {
 identificacion VARCHAR(20) NOT NUL PRIMARY KEY,
@@ -13,11 +14,15 @@ export interface IClientAttribute {
     identificacion: string,
     nombres: string,
     apellidos: string,
-    tipoIdentifcacion: string,
+    tipoIdentificacion: string,
     fechaNacimiento: Date,
     numeroCelular: string,
     correoElectronico: string
 };
+
+export interface IParams {
+    identificacion: string;
+}
 
 /*CREATE TABLE servicios {
 identificacion VARCHAR(20) NOT NUL,
@@ -35,12 +40,29 @@ export interface IServicios {
     fechaInicio: Date,
     ultimaFacturacion: Date,
     ultimoPago: number,
-    clienteIdentificacion: string
 }
+
+export interface IServiciosCreationAttributes extends Optional<IServicios, 'fechaInicio' | 'ultimaFacturacion' | 'ultimoPago' > {}
+
+export interface IUpdateClientServicesRequest {
+    services: {
+        identificacion: string,
+        service: string,
+    }[],
+};
 
 export interface IServicesCelsiaFindIdentificate {
     identificacionClient: string,
 };
+
+export interface IUpdateClientRequest {
+    nombres?: string,
+    apellidos?: string,
+    tipoIdentifcacion?: string,
+    fechaNacimiento?: Date,
+    numeroCelular?: string,
+    correoElectronico?: string
+}
 
 //• CEDULA → CC
 //• TARJETA IDENTIDAD → TI

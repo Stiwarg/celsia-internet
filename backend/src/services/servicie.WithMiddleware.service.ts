@@ -1,3 +1,4 @@
+import AppError from "../errors/AppError.js";
 import type { IServicios, IUpdateClientServicesRequest } from "../interface/models.interface.js";
 import Client from "../models/client.model.js";
 import Servicios from "../models/servicio.model.js";
@@ -11,7 +12,7 @@ class ServiciesCelsia {
             const client = await Client.findByPk(identificacion);
 
             if ( !client ) {
-                throw new Error('No existe el cliente');
+                throw new AppError('No existe el cliente', 404 );
             }
 
             const servicesClients = await Servicios.findAll({
@@ -48,10 +49,10 @@ class ServiciesCelsia {
         try {
             const { identificacion, servicio } = dataServicesClients;
 
-            const client = Client.findByPk( identificacion );
+            const client = await Client.findByPk( identificacion );
 
             if ( !client ) {
-                throw new Error('No existe el cliente');
+                throw new AppError('No existe el cliente', 404);
             }
 
             const searchServicesClientExisting = await this.findService( identificacion, servicio );
@@ -75,7 +76,7 @@ class ServiciesCelsia {
 
             } else {
                 //console.log(`Ya existe un servicio llamado ${ servicio  }con la identificación del cliente en nuestro sistema: ${ identificacion }`);
-                throw new Error(`Ya existe un servicio llamado ${ servicio  }con la identificación del cliente en nuestro sistema: ${ identificacion }`)
+                throw new AppError(`Ya existe un servicio llamado ${ servicio  }con la identificación del cliente en nuestro sistema: ${ identificacion }`, 409 );
                 //return;
             }
         } catch (error: any ) {
@@ -111,23 +112,23 @@ class ServiciesCelsia {
             const client = Client.findByPk( identificacion );
 
             if ( !client ) {
-                throw new Error('No existe el cliente');
+                throw new AppError('No existe el cliente', 404 );
             }
             
             const searchService = await this.findService( identificacion, serviceCurrent );
 
             if ( !searchService ) {
-                throw new Error('No se encuentra este servicio ')
+                throw new AppError('No se encuentra este servicio', 404)
             }
 
             if ( serviceNew === serviceCurrent ) {
-                throw new Error('El servicio nuevo es igual al servicio actual, no se puede actualizar.');
+                throw new AppError('El servicio nuevo es igual al servicio actual, no se puede actualizar.', 409 );
             }
 
             const searchServiceNew = await this.findService( identificacion, serviceNew );
 
             if ( searchServiceNew ) {
-                throw new Error('Ya existe un servicio con el nombre del servicio nuevo, no se puede actualizar.');
+                throw new AppError('Ya existe un servicio con el nombre del servicio nuevo, no se puede actualizar.', 409 );
             }
 
             const updatedServices = await Servicios.update(
@@ -154,13 +155,13 @@ class ServiciesCelsia {
             const client = await Client.findByPk( identificacion );
 
             if ( !client ) {
-                throw new Error('No existe el cliente');
+                throw new AppError('No existe el cliente', 404 );
             }
 
             const searchService = await this.findService( identificacion, service );
 
             if ( !searchService ) {
-                throw new Error('No se encuentra este servicio ')
+                throw new AppError('No se encuentra este servicio', 404)
             }
 
             const destroyService = await Servicios.destroy({

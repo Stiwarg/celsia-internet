@@ -1,3 +1,4 @@
+import AppError from "../errors/AppError.js";
 import type { IClientAttribute, IUpdateClientRequest } from "../interface/models.interface.js";
 import Client from "../models/client.model.js";
 
@@ -11,8 +12,7 @@ class ClientService {
 
             if ( clientSearch ) {
                 //console.log('Este cliente ya existe.');
-                throw new Error('Este cliente ya existe.');
-
+                throw new AppError('Este cliente ya existe', 409 );
             }
 
             const emailSearch = await Client.findOne({
@@ -20,7 +20,7 @@ class ClientService {
             });
 
             if ( emailSearch ) {
-                throw new Error('Este correo electrónico ya esta siendo utilizado.');
+                throw new AppError('Este correo electronico ya esta siendo utilizado.', 409 );
             }
             
             const client = await Client.create({
@@ -45,7 +45,7 @@ class ClientService {
             const clientFind = await Client.findByPk(identificacion);
 
             if ( !clientFind ) {
-                throw new Error('No se encontro ningun usuario con esa identificación');
+                throw new AppError('No se encontro ningun usuario con esa identificación', 404 );
                 ///console.log('No se encontro ningun usuario con esa identificación');
                 //return;
             }
@@ -67,7 +67,7 @@ class ClientService {
             );
             
             if ( Object.keys( updateData ).length === 0 ) {
-                throw new Error('No hay datos para actualizar.')
+                throw new AppError('No hay datos para actualizar.', 409 );
             }
 
             if ( updateData.correoElectronico ) {
@@ -77,7 +77,7 @@ class ClientService {
                 });
 
                 if ( emailSearch && emailSearch.identificacion !== identificacion ) {
-                    throw new Error('Este correo electrónico ya esta siendo utilizado.');
+                    throw new AppError('Este correo electrónico ya esta siendo utilizado.', 409);
                 }
             }
 
@@ -105,7 +105,7 @@ class ClientService {
             });
 
             if ( !destroy ) {
-                throw new Error('Error al eliminar al cliente.');
+                throw new AppError('Error al eliminar al cliente.', 409);
             }
 
             return destroy;

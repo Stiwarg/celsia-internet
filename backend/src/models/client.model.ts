@@ -4,7 +4,7 @@ import sequelize from '../database/connection.js';
 class Client extends Model< IClientAttribute > implements IClientAttribute {
     public identificacion!: string;
     public apellidos!: string;
-    public tipoIdentifcacion!: string;
+    public tipoIdentificacion!: string;
     public numeroCelular!: string;
     public correoElectronico!: string;
     public fechaNacimiento!: Date;
@@ -25,7 +25,7 @@ Client.init({
         allowNull: false
 
     },
-    tipoIdentifcacion: {
+    tipoIdentificacion: {
         type: DataTypes.STRING(2),
         allowNull: false
 
@@ -42,7 +42,8 @@ Client.init({
     },
     correoElectronico: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: false,
+        unique: true
     }
 },
 {
