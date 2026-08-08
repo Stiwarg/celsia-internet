@@ -1,5 +1,5 @@
 import { DataTypes, Model } from "sequelize";
-import type { IClientAttribute } from "../interface/models.interface.js";
+import { ETipoIdenfication, type IClientAttribute } from "../interface/models.interface.js";
 import sequelize from '../database/connection.js';
 class Client extends Model< IClientAttribute > implements IClientAttribute {
     public identificacion!: string;
@@ -26,8 +26,9 @@ Client.init({
 
     },
     tipoIdentificacion: {
-        type: DataTypes.STRING(2),
-        allowNull: false
+        type: DataTypes.ENUM(...Object.values( ETipoIdenfication )),
+        allowNull: false,
+        defaultValue: ETipoIdenfication.CEDULA
 
     },
     fechaNacimiento: {

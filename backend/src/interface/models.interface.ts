@@ -58,7 +58,7 @@ export interface IServicesCelsiaFindIdentificate {
 export interface IUpdateClientRequest {
     nombres?: string,
     apellidos?: string,
-    tipoIdentifcacion?: string,
+    tipoIdentificacion?: string,
     fechaNacimiento?: Date,
     numeroCelular?: string,
     correoElectronico?: string
@@ -87,7 +87,7 @@ export enum EServicio {
     INTERNET_200_MB = "Internet 200 MB",
     INTERNET_400_MB = "Internet 400 MB",
     INTERNET_600_MB = "Internet 600 MB",
-    DIRECTV_GO = "Direct Go",
+    DIRECTV_GO = "Directv Go",
     PARAMOUNT = "Paramount+",
     WIN = "Win+"
 }

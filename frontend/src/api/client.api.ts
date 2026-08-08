@@ -5,7 +5,7 @@ class ClientApi {
     
     static createClient = async ( newDataClient: IClientAttribute ) => {
         const response = await api.post('/client/clientAdd', newDataClient);
-
+        console.log( response.data );
         return response.data;
 
     }
@@ -13,7 +13,7 @@ class ClientApi {
     static findClient = async ( identificacion: string ) => {
         const response = await api.get( `/client/clientFind/${identificacion}`)
 
-        return response.data;
+        return response.data.client;
     }
 
     static updateDataClient = async ( identificacion: string, dataUpdate: IClientAttributeUpdate ) => {

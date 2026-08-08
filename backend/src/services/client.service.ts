@@ -1,5 +1,7 @@
+import sequelize from "../database/connection.js";
 import type { IClientAttribute, IUpdateClientRequest } from "../interface/models.interface.js";
 import Client from "../models/client.model.js";
+import Servicios from "../models/servicio.model.js";
 
 class ClientService {
     
@@ -73,8 +75,19 @@ class ClientService {
             if ( updateData.correoElectronico ) {
                 
                 const emailSearch = await Client.findOne({
-                    where: { correoElectronico: updateData.correoElectronico }
+                    where: { correoElectronico: updateData.correoElectronico },
+                    raw: true
                 });
+
+                //console.log('Instancia', emailSearch instanceof Client );
+                //console.log('Object keys ', Object.keys( emailSearch! ));
+                //console.log('get',emailSearch?.get("identificacion"));
+                //console.log('Elementos encontrados:', emailSearch?.dataValues );
+                //console.log('Correo Recibido: ', updateData.correoElectronico );
+                //console.log('Cliente encontrado: ', emailSearch?.toJSON() );
+                console.log('Identificación recibida:', identificacion );
+                //console.log('Identificación encontrada:', emailSearch?.correoElectronico );
+
 
                 if ( emailSearch && emailSearch.identificacion !== identificacion ) {
                     throw new Error('Este correo electrónico ya esta siendo utilizado.');
@@ -115,6 +128,8 @@ class ClientService {
         }
 
     }
+
+
 }
 
 export default ClientService;

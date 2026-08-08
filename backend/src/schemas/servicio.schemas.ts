@@ -1,33 +1,64 @@
 import z from "zod";
+import { EServicio } from "../interface/models.interface.js";
+import { DateValidatos } from "../helpers/date-validators.js";
 
 export const servicioSchema = z.object({
-    identificacion: z.string().min(1, "Debe haber al menos un caracter").max(20, "Solamente se puede 20 caracteres"),
-    servicio: z.string().min(1, "Debe haber al menos un caracter").max(80, "Solamente se puede 80 caracteres"),
+    identificacion: z.string()
+    .regex(/^\d+$/, 'La identificación solo puede contener números')
+    .min(1, "Debe haber al menos un caracter")
+    .max(20, "Solamente se puede 20 caracteres"),
+    servicio: z.enum(
+        EServicio, {
+            error: 'Debe seleccionar un tipo de servicio válido',
+        }
+    ),
     fechaInicio: z.coerce.date({
         error: 'Fecha invalidada'
+    })
+    .refine( DateValidatos.isBeforeToday, {
+        message: 'La fecha de inicio no puede ser futura'
     }),
     ultimaFacturacion: z.coerce.date({
         error: 'Fecha invalidad'
-    }),
+    })
+    .refine( DateValidatos.isBeforeToday, {
+        message: 'La fecha de la ultima facturación no puede ser futura'
+    })
+    ,
     ultimoPago: z.number({
         error: "El ultimo pago debe ser escrito por numeros"
-    }).min(1, "El campo u,ultimo pago no puede estar vacio"),
-    clienteIdentificacion: z.string({
-        error: "El campo de la identificacion del cliente es requerido"
     })
+});
+
+export const updatedServicesSchema = z.object({
+    dataUpdate: z.object({
+        serviceNew: z.enum(
+            EServicio, {
+                error: 'Debe seleccionar un tipo de servicio válido'
+            }
+        ),
+    }),
+    serviceCurrent: z.enum(
+        EServicio, {
+            error: 'Debe seleccionar un tipo de servicio válido'
+        }
+    )
 });
 
 export const findIdentificationClientSchema = z.object({
-    identificacion: z.string({
-        error: "El campo de la identificacion del cliente es requerido"
-    })
+    identificacion: z.string()
+        .regex(/^\d+$/, 'La identificación solo puede contener números')
+        .min(1, 'Debe haber al menos un caracter')
+        .max(20, 'Solamente se puede 20 caracteres')
 });
 
 export const findServiceClientSchema = z.object({
-    service: z.string().min(1, "Debe haber al menos un caracter").max(80,"Solamente se puede 80 caracteres")
+    service: z.enum( EServicio, {
+        error: 'Debe seleccionar un tipo de servicio válido'
+    })
 });
 
-export const updatedServicesSchema = servicioSchema.partial().omit({ identificacion: true });
+//export const updatedServicesSchema = servicioSchema.partial().omit({ identificacion: true, fechaInicio: true, ultimaFacturacion: true, ultimoPago: true });
 
 export type TServicioSchema = z.infer< typeof servicioSchema >;
 

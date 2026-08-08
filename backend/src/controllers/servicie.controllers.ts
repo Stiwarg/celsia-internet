@@ -11,11 +11,11 @@ class ServicioController {
                 identificacion
                 } = req.params;
             
-            const verification = await ServiciesCelsia.contractedServices( String( identificacion ) );
+            const services = await ServiciesCelsia.contractedServices( String( identificacion ) );
 
             res.status(200).send({
                 message: 'Se encontraron estos servicios tomados por el cliente',
-                verification
+                services
             });
         } catch (error: any) {
 
@@ -51,7 +51,8 @@ class ServicioController {
                 });
             }
 
-            if ( error.message.includes(`Ya existe un servicio llamado ${ servicio  }con la identificación del cliente en nuestro sistema: ${ identificacion }`) ) {
+
+            if ( error.message.includes(`Ya existe un servicio llamado ${ servicio } con la identificación del cliente en nuestro sistema: ${ identificacion }`) ) {
                 return res.status(409).json({
                     message: error.message
                 })
@@ -67,8 +68,11 @@ class ServicioController {
     static servicesUpdate = async ( req: Request, res: Response ) => {
         try {
             const { identificacion } = req.params
-            const { serviceNew, serviceCurrent } = req.body;
+            console.log('Body', req.body );
+            const { dataUpdate: { serviceNew }, serviceCurrent } = req.body;
 
+            console.log('serviceNew:', serviceNew);
+            console.log('serviceCurrent:', serviceCurrent);
             const service = await ServiciesCelsia.updateServices( String(identificacion), serviceNew, serviceCurrent );
 
             return res.status(200).json({

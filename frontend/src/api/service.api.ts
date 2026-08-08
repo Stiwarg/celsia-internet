@@ -1,4 +1,4 @@
-import type { IServicesUpdate, IServicios } from '../types/celsia.types';
+import type { IServiceUpdate, IServicios } from '../types/celsia.types';
 import api from './axiosConfig';
 
 class ServiceApi {
@@ -16,8 +16,8 @@ class ServiceApi {
     }
 
 
-    static updateDataService = async ( identificacion: string, dataUpdate: IServicesUpdate ) => {
-        const response = await api.put(`/service/servicesUpdate/${ identificacion }`, dataUpdate );
+    static updateDataService = async ( identificacion: string, dataUpdate: IServiceUpdate, serviceCurrent: string ) => {
+        const response = await api.put(`/service/servicesUpdate/${ identificacion }`,{ dataUpdate, serviceCurrent } );
 
         return response.data;
 

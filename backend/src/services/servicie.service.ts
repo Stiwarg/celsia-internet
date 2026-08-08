@@ -1,4 +1,4 @@
-import type { IServicios, IUpdateClientServicesRequest } from "../interface/models.interface.js";
+import type { IServicios } from "../interface/models.interface.js";
 import Client from "../models/client.model.js";
 import Servicios from "../models/servicio.model.js";
 
@@ -48,7 +48,7 @@ class ServiciesCelsia {
         try {
             const { identificacion, servicio } = dataServicesClients;
 
-            const client = Client.findByPk( identificacion );
+            const client = await Client.findByPk( identificacion );
 
             if ( !client ) {
                 throw new Error('No existe el cliente');
@@ -75,7 +75,7 @@ class ServiciesCelsia {
 
             } else {
                 //console.log(`Ya existe un servicio llamado ${ servicio  }con la identificación del cliente en nuestro sistema: ${ identificacion }`);
-                throw new Error(`Ya existe un servicio llamado ${ servicio  }con la identificación del cliente en nuestro sistema: ${ identificacion }`)
+                throw new Error(`Ya existe un servicio llamado ${ servicio } con la identificación del cliente en nuestro sistema: ${ identificacion }`)
                 //return;
             }
         } catch (error: any ) {
@@ -108,7 +108,7 @@ class ServiciesCelsia {
     static updateServices = async ( identificacion: string ,serviceNew :string, serviceCurrent: string ) => {
         try {
 
-            const client = Client.findByPk( identificacion );
+            const client = await Client.findByPk( identificacion );
 
             if ( !client ) {
                 throw new Error('No existe el cliente');
@@ -149,6 +149,7 @@ class ServiciesCelsia {
     }
 
     static destroyService = async ( identificacion: string, service: string ) => {
+        
         try {
 
             const client = await Client.findByPk( identificacion );
@@ -175,7 +176,6 @@ class ServiciesCelsia {
             throw error;
         }
     }
-
 
 }
 

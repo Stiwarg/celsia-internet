@@ -10,14 +10,14 @@ import { routeNotFound } from './middleware/nonExistentRoute.js';
 const bootstrapMain = async () => {
     try {
         await connections();  
-        await sequelize.sync()    
+        await sequelize.sync({ force: true });  // Esto recrea las tablas      
         const app = express();
         const PORT = 3000;
         const corsOptions = {
             origin: 'http://localhost:5173',
             methods: ['GET','POST','PUT','PATCH','DELETE','HEAD'],
             allowedHeaders: ['Content-Type', 'Authorization'],
-            //credentials: true
+            credentials: false
         };
         app.use( cors( corsOptions ) );
         app.use( express.json() );

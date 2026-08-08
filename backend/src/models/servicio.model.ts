@@ -1,5 +1,5 @@
 import { DataTypes, Model } from "sequelize";
-import type { IServicios } from "../interface/models.interface.js";
+import { EServicio, type IServicios } from "../interface/models.interface.js";
 import sequelize from '../database/connection.js';
 
 class Servicios extends Model< IServicios > implements IServicios {
@@ -16,7 +16,9 @@ Servicios.init({
         primaryKey: true
     },
     servicio: {
-        type: DataTypes.STRING(80),
+        type: DataTypes.ENUM(...Object.values(
+            EServicio
+        )),
         allowNull: false,
         primaryKey: true
     },
