@@ -1,4 +1,5 @@
 import { Sequelize } from "sequelize";
+import { configEnv } from "../config/env.js";
 
 /*const sequelize = new Sequelize({
     dialect: 'postgres',
@@ -9,10 +10,10 @@ import { Sequelize } from "sequelize";
     port: 5432
 });*/
 
-const sequelize = new Sequelize('celsia_prueba_db', 'postgres', 'camacho123',{
+const sequelize = new Sequelize( configEnv.db.database , configEnv.db.user, configEnv.db.password ,{
     dialect: 'postgres',
-    host: 'localhost',
-    port: 5432,
+    host: configEnv.db.host,
+    port: configEnv.db.dbPort,
     logging: (...msg) => console.log(msg)
 })
 

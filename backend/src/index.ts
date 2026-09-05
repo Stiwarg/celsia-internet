@@ -1,20 +1,20 @@
 import express, { type Response } from 'express';
 import cors from 'cors';
-import cookieParser from 'cookie-parser';
 import sequelize, { connections } from './database/connection.js';
-import '../src/database/associations.js';
+import './database/associations.js';
 import routeClient from './routes/clients.routes.js';
 import routeService from './routes/servicesCelsia.routes.js';
 import { globalErrorHandler } from './middleware/errorHandler.js';
 import { routeNotFound } from './middleware/nonExistentRoute.js';
+import { configEnv } from './config/env.js';
 const bootstrapMain = async () => {
     try {
         await connections();  
         await sequelize.sync({ force: true });  // Esto recrea las tablas      
         const app = express();
-        const PORT = 3000;
+        //const PORT = 3000;
         const corsOptions = {
-            origin: 'http://localhost:5173',
+            origin: configEnv.frontendUrl,
             methods: ['GET','POST','PUT','PATCH','DELETE','HEAD'],
             allowedHeaders: ['Content-Type', 'Authorization'],
             credentials: false
@@ -23,7 +23,7 @@ const bootstrapMain = async () => {
         app.use( express.json() );
         //app.use( cookieParser() );
 
-        const localhost = 'localhost'
+        //const localhost = 'localhost'
 
         app.get('/', (_, res: Response ) => {
             res.send('Hello, World!')
@@ -35,8 +35,8 @@ const bootstrapMain = async () => {
         app.use( globalErrorHandler );
 
 
-        app.listen( PORT, () => {
-            console.log(` Bienvenido a celsia Internet http://${localhost}:3000`);
+        app.listen( configEnv.port, configEnv.host ,() => {
+            console.log(` Bienvenido a celsia Internet http://${configEnv.host}:${configEnv.port}`);
         });
     } catch (error) {
         console.error('Error:', error);
